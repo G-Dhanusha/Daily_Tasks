@@ -6,7 +6,7 @@
 
     * **Port** : **`jenkins default port number: 8080`** 
 
-    * **Path for password**: `/var/lib/jenkins/secrets/initialAdminPassword location`
+    * **Path for password**: `/var/lib/jenkins/secrets/initialAdminPassword`
 
 ```sh
 #! /bin/bash
