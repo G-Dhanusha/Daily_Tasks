@@ -18,7 +18,14 @@ sudo systemctl enable jenkins
 sudo systemctl start jenkins
 sudo systemctl status jenkins
 ```
+* Give permission to exectue the above file and run it.
 
+```sh
+sudo chmod +x jenkins.sh
+
+# run the script file
+./jenkins.sh
+```
 
 
 ## 2. Install sonarqube
@@ -131,6 +138,15 @@ systemctl status sonarqube
 
 # Final message
 echo "Installation and configuration completed successfully."
+```
+
+* Give permission to exectue the above file and run it.
+
+```sh
+sudo chmod +x sonar.sh
+
+# run the script file
+./sonar.sh
 ```
 
 
