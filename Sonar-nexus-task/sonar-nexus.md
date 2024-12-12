@@ -84,11 +84,18 @@ sudo chown sonar:sonar /opt/sonarqube -R
 
 # Configure SonarQube
 echo "Configuring SonarQube..."
-sudo nano /opt/sonarqube/conf/sonar.properties
+sudo touch /opt/sonarqube/conf/sonar.properties
+echo "
+sonar.jdbc.username=admin
+sonar.jdbc.password=admin123 
+" | sudo tee /opt/sonarqube/conf/sonar.properties
 
 # Update SonarQube startup script
 echo "Updating SonarQube startup script..."
-sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh
+sudo touch /opt/sonarqube/bin/linux-x86-64/sonar.sh
+echo "
+RUN_AS_USER="sonar"
+" | sudo tee /opt/sonarqube/bin/linux-x86-64/sonar.sh
 
 # Create systemd service for SonarQube
 echo "Creating SonarQube systemd service..."
@@ -96,15 +103,18 @@ sudo touch /etc/systemd/system/sonarqube.service
 echo "
 [Unit]
 Description=SonarQube service
-After=network.target
+After=syslog.target network.target
 
 [Service]
 Type=forking
+
 ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
 ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+
 User=sonar
 Group=sonar
 Restart=always
+
 LimitNOFILE=65536
 LimitNPROC=4096
 
