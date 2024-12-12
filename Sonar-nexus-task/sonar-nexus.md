@@ -2,8 +2,12 @@
 
 ## 1. Create EC2 Instance:
 
-* Login into server and install jenkins for Amazon linux:
-    
+* Login into server and install jenkins for Amazon linux using shell script: 
+
+    * **Port** : **`jenkins default port number: 8080`** 
+
+    * **Path for password**: `/var/lib/jenkins/secrets/initialAdminPassword location`
+
 ```sh
 #! /bin/bash
 
@@ -29,6 +33,11 @@ sudo chmod +x jenkins.sh
 
 
 ## 2. Install sonarqube
+
+* Now, install sonarqube for Amazon linux using shell script:
+
+    * Port: **`sonarqube default port number`: `9000`**
+    * Default `username` = `admin` and `password` = `admin`
 
 ```sh
 #!/bin/bash
