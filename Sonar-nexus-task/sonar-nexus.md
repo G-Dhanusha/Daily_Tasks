@@ -50,22 +50,18 @@ sudo chmod +x jenkins.sh
 echo "Updating system packages..."
 sudo yum update -y
 
-# Add PostgreSQL repository
-echo "Configuring PostgreSQL repository..."
-sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-$(rpm -E %{rhel})-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-sudo dnf -qy module disable postgresql
-
 # Install Java
 echo "Installing OpenJDK 11..."
-sudo yum install -y java-11-openjdk-devel
+sudo amazon-linux-extras enable java-openjdk11
+sudo yum install -y java-11-openjdk
 
-# Install PostgreSQL
-echo "Installing PostgreSQL..."
-sudo yum install -y postgresql15-server postgresql15-contrib
-
-# Initialize PostgreSQL database
-echo "Initializing PostgreSQL database..."
-sudo /usr/pgsql-15/bin/postgresql-15-setup initdb
+# Add PostgreSQL repository
+echo "Configuring PostgreSQL repository..."
+sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+sudo amazon-linux-extras enable postgresql15
+sudo yum install -y postgresql-server postgresql-contrib
+sudo /usr/bin/postgresql-setup --initdb   # Initialize PostgreSQL database
+sudo systemctl enable --now postgresql
 
 # Enable and start PostgreSQL service
 echo "Enabling and starting PostgreSQL service..."
