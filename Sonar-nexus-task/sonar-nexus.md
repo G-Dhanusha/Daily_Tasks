@@ -39,6 +39,10 @@ sudo chmod +x jenkins.sh
     * Port: **`sonarqube default port number`: `9000`**
     * Default `username` = `admin` and `password` = `admin`
 
+* Set Postgres strong password:
+
+    * Complexity: Includes uppercase letters (D), lowercase letters (hanu), numbers (2024), and a special character ($ and !).
+
 ```sh
 #!/bin/bash
 
@@ -49,15 +53,19 @@ sudo yum update -y
 # Add PostgreSQL repository
 echo "Configuring PostgreSQL repository..."
 sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-$(rpm -E %{rhel})-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-sudo yum install -y epel-release
+sudo dnf -qy module disable postgresql
+
+# Install Java
+echo "Installing OpenJDK 11..."
+sudo yum install -y java-11-openjdk-devel
 
 # Install PostgreSQL
 echo "Installing PostgreSQL..."
-sudo yum install -y postgresql postgresql-server postgresql-contrib
+sudo yum install -y postgresql15-server postgresql15-contrib
 
 # Initialize PostgreSQL database
 echo "Initializing PostgreSQL database..."
-sudo postgresql-setup --initdb
+sudo /usr/pgsql-15/bin/postgresql-15-setup initdb
 
 # Enable and start PostgreSQL service
 echo "Enabling and starting PostgreSQL service..."
@@ -90,6 +98,7 @@ echo "Creating SonarQube user and group..."
 sudo groupadd sonar
 sudo useradd -d /opt/sonarqube -g sonar sonar
 sudo chown sonar:sonar /opt/sonarqube -R
+
 
 # Configure SonarQube
 echo "Configuring SonarQube..."
@@ -131,6 +140,9 @@ LimitNPROC=4096
 WantedBy=multi-user.target
 " | sudo tee /etc/systemd/system/sonarqube.service
 
+sudo chmod +x /opt/sonarqube/bin/linux-x86-64/sonar.sh
+sudo chown -R sonar:sonar /opt/sonarqube
+
 # Enable and start SonarQube service
 echo "Enabling and starting SonarQube service..."
 sudo systemctl enable sonarqube
@@ -141,10 +153,6 @@ sudo systemctl status sonarqube
 echo "Installing Maven..."
 sudo yum install -y maven
 mvn --version
-
-# Install Java
-echo "Installing OpenJDK 11..."
-sudo yum install -y java-11-openjdk-devel
 
 # Configure Java alternatives
 echo "Configuring Java alternatives..."
