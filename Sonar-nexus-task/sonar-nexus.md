@@ -86,6 +86,16 @@ EOF
 echo "Installing zip utility..."
 sudo yum install -y zip
 
+# Install Maven
+echo "Installing Maven..."
+sudo yum install -y maven
+mvn --version
+
+# Configure Java alternatives
+echo "Configuring Java alternatives..."
+sudo alternatives --config java
+java --version
+
 # Download and install SonarQube
 echo "Downloading and installing SonarQube..."
 sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.6.1.59531.zip
@@ -145,23 +155,10 @@ sudo chown -R sonar:sonar /opt/sonarqube
 
 # Enable and start SonarQube service
 echo "Enabling and starting SonarQube service..."
+sudo chmod +x sonar.sh
 sudo systemctl enable sonarqube
 sudo systemctl start sonarqube
 sudo systemctl status sonarqube
-
-# Install Maven
-echo "Installing Maven..."
-sudo yum install -y maven
-mvn --version
-
-# Configure Java alternatives
-echo "Configuring Java alternatives..."
-sudo alternatives --config java
-java --version
-
-# Verify SonarQube service status
-echo "Checking SonarQube service status..."
-systemctl status sonarqube
 
 # Final message
 echo "Installation and configuration completed successfully."
